@@ -1,0 +1,10 @@
+.header__link_type_exit {
+  color: rgba(169, 169, 169, 1);
+}
+
+/* 568px */
+@media (max-width: 568px) {
+  .header__link_type_exit {
+    display: none;
+  }
+}

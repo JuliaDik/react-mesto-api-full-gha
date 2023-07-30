@@ -1,0 +1,18 @@
+.header__logo {
+  margin-right: auto;
+  width: 142px;
+}
+
+/* 1024px */
+@media (max-width: 1024px) {
+  .header__logo {
+    width: calc((100vw - 425px) / (1024 - 425) * (142 - 104) + 104px);
+  }
+}
+
+/* 425px */
+@media (max-width: 425px) {
+  .header__logo {
+    width: 104px;
+  }
+}

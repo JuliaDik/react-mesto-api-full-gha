@@ -1,0 +1,14 @@
+.footer__copyright {
+  margin: 0;
+  font-weight: 400;
+  font-size: calc((100vw - 425px) / (1280 - 425) * (18 - 14) + 14px);
+  line-height: 1.2;
+  color: rgba(84, 84, 84, 1);
+}
+
+/* 425px */
+@media (max-width: 425px) {
+  .footer__copyright {
+    font-size: 14px;
+  }
+}

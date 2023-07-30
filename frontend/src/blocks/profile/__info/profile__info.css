@@ -1,0 +1,26 @@
+.profile__info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 9px 19px;
+  align-items: baseline;
+  color: rgba(255, 255, 255, 1);
+}
+
+/* 768px */
+@media (max-width: 768px) {
+  .profile__info {
+    grid-template-columns: 34px auto 34px;
+    grid-template-areas:
+      ". name edit-button"
+      ". about .";
+    gap: 10px 0;
+    margin-bottom: 32px;
+  }
+}
+
+/* 425px */
+@media (max-width: 425px) {
+  .profile__info {
+    grid-template-columns: 28px auto 34px;
+  }
+}

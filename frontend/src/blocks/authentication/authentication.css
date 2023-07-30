@@ -1,0 +1,14 @@
+.authentication {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+}
+
+/* 568px */
+@media (max-width: 568px) {
+  .authentication {
+    padding-top: 44px;
+  }
+}

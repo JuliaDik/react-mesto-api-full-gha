@@ -1,0 +1,15 @@
+.authentication__question {
+  margin-top: 15px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: rgb(255, 255, 255, 1);
+  text-align: center;
+}
+
+/* 568px */
+@media (max-width: 568px) {
+  .authentication__question {
+    margin-top: 20px;
+  }
+}

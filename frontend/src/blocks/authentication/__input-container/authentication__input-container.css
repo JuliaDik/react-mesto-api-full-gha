@@ -1,0 +1,12 @@
+.authentication__input-container {
+  display: flex;
+  flex-direction: column;
+  margin: 45px 0 178px;
+}
+
+/* 568px */
+@media (max-width: 568px) {
+  .authentication__input-container {
+    margin: 36px 0 106px;
+  }
+}

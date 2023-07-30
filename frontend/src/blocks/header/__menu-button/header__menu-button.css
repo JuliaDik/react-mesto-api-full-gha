@@ -1,0 +1,11 @@
+/* 568px */
+@media (max-width: 568px) {
+  .header__menu-button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: no-repeat center / contain;
+    border: none;
+    cursor: pointer;
+  }
+}

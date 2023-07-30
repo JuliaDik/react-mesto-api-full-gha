@@ -1,0 +1,28 @@
+.profile {
+  display: grid;
+  grid-template-columns: -webkit-min-content minmax(400px, 1fr) -webkit-min-content;
+  grid-template-columns: min-content minmax(400px, 1fr) min-content;
+  -moz-column-gap: 30px;
+  column-gap: 30px;
+  align-items: center;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 36px 0 51px;
+  box-sizing: border-box;
+}
+
+/* 900px */
+@media (max-width: 900px) {
+  .profile {
+    padding: 42px 19px 36px;
+  }
+}
+
+/* 768px */
+@media (max-width: 768px) {
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
