@@ -8,6 +8,7 @@ const { errors, Joi, celebrate } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const NotFoundError = require('./errors/not-found-err');
@@ -44,6 +45,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors);
 
+// логгер запросов
+app.use(requestLogger);
+
 // роут регистрации
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -76,6 +80,9 @@ app.use('/cards', cardsRouter);
 app.use('/*', (req, res, next) => {
   next(new NotFoundError('Запрашиваемый роут не найден'));
 });
+
+// логгер ошибок
+app.use(errorLogger);
 
 // обработка ошибок celebrate
 app.use(errors());
