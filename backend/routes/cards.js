@@ -4,8 +4,8 @@ const { URL_REGEX } = require('../utils/constants');
 
 const {
   getCards,
-  createCard,
-  deleteCardById,
+  addCard,
+  deleteCard,
   likeCard,
   dislikeCard,
 } = require('../controllers/cards');
@@ -18,14 +18,14 @@ router.post('/', celebrate({
     name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().regex(URL_REGEX),
   }),
-}), createCard);
+}), addCard);
 
 router.delete('/:cardId', celebrate({
   // валидируем параметры запроса
   params: Joi.object().keys({
     cardId: Joi.string().required().hex().length(24),
   }),
-}), deleteCardById);
+}), deleteCard);
 
 router.put('/:cardId/likes', celebrate({
   // валидируем параметры запроса

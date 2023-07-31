@@ -3,11 +3,11 @@ import PopupWithForm from "./PopupWithForm";
 import Input from "./Input";
 import useFormAndValidation from "../hooks/useFormAndValidation";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
+function AddCardPopup({ isOpen, onClose, onAddCard, isLoading }) {
   const { values, errors, isValid, handleChange, resetForm } = useFormAndValidation({
-      name: "",
-      link: "",
-    });
+    name: "",
+    link: "",
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -18,7 +18,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   function handleSubmit(evt) {
     evt.preventDefault();
     if (isValid) {
-      onAddPlace(values.name, values.link);
+      onAddCard(values.name, values.link);
     }
   }
 
@@ -58,4 +58,4 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   );
 }
 
-export default AddPlacePopup;
+export default AddCardPopup;

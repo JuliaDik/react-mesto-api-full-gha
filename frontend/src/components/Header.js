@@ -4,13 +4,13 @@ import menuButton from "../images/menu-icon.svg";
 import closeButton from "../images/close-button.svg";
 import MobileMenu from "./MobileMenu";
 
-function Header({ loggedIn, onLogout, currentUserEmail, isOpen, onMenuClick }) {
+function Header({ loggedIn, onLogout, currentUserEmail, isMenuOpen, onMenuClick }) {
   return (
     <>
       <MobileMenu
         currentUserEmail={currentUserEmail}
         onLogout={onLogout}
-        isOpen={isOpen}
+        isOpen={isMenuOpen}
       />
       <header className="header">
         <img className="header__logo" src={logo} alt="Логотип Mesto"/>
@@ -49,7 +49,7 @@ function Header({ loggedIn, onLogout, currentUserEmail, isOpen, onMenuClick }) {
         <div
           className="header__menu-button"
           style={{
-            backgroundImage: isOpen
+            backgroundImage: isMenuOpen
               ? `url(${closeButton})`
               : `url(${menuButton})`,
             display: !loggedIn ? "none" : "block",

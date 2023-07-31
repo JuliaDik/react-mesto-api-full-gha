@@ -3,24 +3,30 @@ const { JWT_SECRET } = require('../utils/constants');
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const auth = (req, res, next) => {
+  // получаем из заголовков запроса заголовок авторизации
   const { authorization } = req.headers;
 
+  // если заголовок авторизации отсутствует
   if (!authorization || !authorization.startsWith('Bearer ')) {
+    // возвращаем ошибку: уведомляем пользователя о необходимости авторизоваться
     return next(new UnauthorizedError('Необходима авторизация'));
   }
 
+  // извлекаем из схемы аутентификации Bearer только токен
   const token = authorization.replace('Bearer ', '');
 
   let payload;
 
   try {
-    // верифицируем токен
-    // сравниваем текущий токен с токеном, выданным при авторизации
+    // сравниваем текущий токен с токеном, выданным сервером пользователю при его авторизации
+    // сохраняем данные аутентификации в payload токена
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
+    // если не совпадают, то возвращаем ошибку:
+    // уведомляем пользователя о необходимости авторизоваться
     return next(new UnauthorizedError('Необходима авторизация'));
   }
-  // добавить пейлоуд токена в объект запроса
+  // добавляем в объект запроса данные об аутентификации пользователя
   req.user = payload;
   return next();
 };

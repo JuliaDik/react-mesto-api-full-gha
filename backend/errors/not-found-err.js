@@ -1,4 +1,4 @@
-// Не найден запрашиваемый ресурс
+// не найден запрашиваемый ресурс
 class NotFoundError extends Error {
   constructor(message) {
     super(message);

@@ -1,4 +1,4 @@
-// Запрещен доступ к ресурсу
+// запрещен доступ к ресурсу
 class ForbiddenError extends Error {
   constructor(message) {
     super(message);

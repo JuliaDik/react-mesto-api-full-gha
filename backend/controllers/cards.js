@@ -11,7 +11,7 @@ const getCards = (req, res, next) => {
     .catch(next);
 };
 
-const createCard = (req, res, next) => {
+const addCard = (req, res, next) => {
   // ТЕЛО ЗАПРОСА: получаем name и link карточки
   const { name, link } = req.body;
   const userId = req.user._id;
@@ -28,7 +28,7 @@ const createCard = (req, res, next) => {
     });
 };
 
-const deleteCardById = (req, res, next) => {
+const deleteCard = (req, res, next) => {
   // ПАРАМЕТРЫ ЗАПРОСА: получаем id карточки из url-адреса
   const { cardId } = req.params;
   // ОБРАЩЕНИЕ К БД: найти карточку по id и удалить
@@ -99,8 +99,8 @@ const dislikeCard = (req, res, next) => {
 
 module.exports = {
   getCards,
-  createCard,
-  deleteCardById,
+  addCard,
+  deleteCard,
   likeCard,
   dislikeCard,
 };

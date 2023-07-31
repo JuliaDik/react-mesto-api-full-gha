@@ -4,7 +4,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import useFormAndValidation from "../hooks/useFormAndValidation";
 import Input from "./Input";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateInfo, isLoading }) {
   const currentUser = useContext(CurrentUserContext);
 
   const { values, errors, isValid, setIsValid, handleChange, setValues } = useFormAndValidation({
@@ -23,7 +23,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   function handleSubmit(evt) {
     evt.preventDefault();
     if (isValid) {
-      onUpdateUser(values.name, values.about);
+      onUpdateInfo(values.name, values.about);
     }
   }
 

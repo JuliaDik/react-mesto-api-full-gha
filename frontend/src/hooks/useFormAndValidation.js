@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 
+// универсальная схема валидации форм
 function useFormAndValidation(inputValues) {
   const [values, setValues] = useState(inputValues);
   const [errors, setErrors] = useState({});
@@ -23,12 +24,12 @@ function useFormAndValidation(inputValues) {
 
   return {
     values,
+    setValues,
     errors,
     isValid,
     setIsValid,
     handleChange,
     resetForm,
-    setValues,
   };
 }
 

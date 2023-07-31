@@ -32,14 +32,14 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    // по умолчанию хеш пароля пользователя не будет возвращаться из БД
+    // по умолчанию хеш пароля пользователя не возваращается из БД
     select: false,
   },
 });
 
-// в случае аутентификации разрешить возвращение хеша пароля пользователя из БД
+// в случае успешной аутентификации разрешаем возвращение хеша пароля пользователя из БД
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
-  // поиск пользователя с указанной почтой
+  // ищем пользователя в БД по почте
   // this — это модель User
   return this.findOne({ email }).select('+password')
     .then((user) => {

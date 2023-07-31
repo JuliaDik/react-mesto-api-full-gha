@@ -5,10 +5,10 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function Main({
   onEditAvatar,
   onEditProfile,
-  onAddPlace,
+  onAddCard,
   onCardClick,
-  onCardLike,
-  onCardDelete,
+  onToggleLike,
+  onConfirmDelete,
   cards,
 }) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -40,7 +40,7 @@ function Main({
           type="button"
           aria-label="кнопка-добавить"
           title="Добавить карточку"
-          onClick={onAddPlace}
+          onClick={onAddCard}
         ></button>
       </section>
       <section className="gallery" aria-label="карточки с фотографиями">
@@ -50,8 +50,8 @@ function Main({
               card={card}
               key={card._id}
               onCardClick={onCardClick}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
+              onCardLike={onToggleLike}
+              onCardDelete={onConfirmDelete}
             />
           ))}
         </ul>

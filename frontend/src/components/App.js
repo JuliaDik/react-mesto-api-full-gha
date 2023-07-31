@@ -12,22 +12,21 @@ import Footer from "./Footer";
 import PopupWithConfirmation from "./PopupWithConfirmation";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup";
+import AddCardPopup from "./AddCardPopup";
 import ImagePopup from "./ImagePopup";
 import InfoTooltip from "./InfoTooltip";
 
 function App() {
-  // аутентификация
+  // статус регистрации/авторизации для InfoTooltip
   const [isSucceeded, setIsSucceeded] = useState(false);
-  // авторизация
+  // состояние авторизации
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // попапы
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isPopupWithConfirmationOpen, setIsPopupWithConfirmationOpen] =
-    useState(false);
+  const [isAddCardPopupOpen, setIsAddCardPopupOpen] = useState(false);
+  const [isPopupWithConfirmationOpen, setIsPopupWithConfirmationOpen] = useState(false);
   // пользователь
   const [currentUser, setCurrentUser] = useState({});
   const [currentUserEmail, setCurrentUserEmail] = useState("");
@@ -42,18 +41,19 @@ function App() {
 
   const navigate = useNavigate();
 
+  // отрисовка основной страницы
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
+    // если токен есть в локальном хранилище браузера, то отправляем его серверу на проверку
     if (jwt) {
       auth
         .checkToken(jwt)
         .then((res) => {
           if (res) {
-            // при повторном визите на сайт
-            // пользователь не должен вновь авторизовываться
             setCurrentUserEmail(res.email);
+            // если токен успешно проходит проверку, пользователь авторизовывается и получает доступ к системе (защищенным маршрутам)
             setIsLoggedIn(true);
-            // сразу перенаправляется в пользовательский профиль
+            // и перенаправляется на основную страницу /
             navigate("/", { replace: true });
           }
         })
@@ -63,12 +63,14 @@ function App() {
     }
   }, [navigate]);
 
+  // отрисовка данных пользователя и карточек
   useEffect(() => {
+    // если пользователь авторизован, на основной странице отображаются данные пользователя и карточки
     if (isLoggedIn) {
       Promise.all([api.getUserInfo(), api.getCards()])
-        .then(([userData, cards]) => {
-          setCurrentUser(userData);
-          setCards(cards);
+        .then(([user, cards]) => {
+          setCurrentUser(user);
+          setCards(cards.reverse());
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
@@ -83,7 +85,7 @@ function App() {
         if (res) {
           setIsSucceeded(true);
           setIsInfoTooltipOpen(true);
-          // перенаправляем на авторизацию (вход в систему)
+          // пользователь перенаправляется на страницу авторизации (логина)
           navigate("/sign-in", { replace: true });
         }
       })
@@ -99,10 +101,11 @@ function App() {
       .login(email, password)
       .then((res) => {
         if (res) {
-          // сохраняем токен
+          // после успешной авторизации сервер присваивает пользователю токен
+          // извлекаем токен из ответа сервера и сохраняем его в локальном хранилище браузера
           localStorage.setItem("jwt", res.token);
           setIsLoggedIn(true);
-          // перенаправляем в пользовательский профиль
+          // пользователь получает доступ к системе и перенаправляется на основную страницу /
           navigate("/", { replace: true });
         }
       })
@@ -114,10 +117,10 @@ function App() {
   }
 
   function handleLogout() {
-    // удаляем токен
+    // при выходе из системы удаляем токен из локального хранилища браузера
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
-    // перенаправляем на авторизацию (вход в систему)
+    // пользователь перенаправляется на страницу авторизации (логина)
     navigate("/sign-in", { replace: true });
     handleMenuMobileOpen();
   }
@@ -134,8 +137,8 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
+  function handleAddCardClick() {
+    setIsAddCardPopupOpen(true);
   }
 
   function handleCardClick(card) {
@@ -145,18 +148,18 @@ function App() {
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
+    setIsAddCardPopupOpen(false);
     setIsPopupWithConfirmationOpen(false);
     setIsInfoTooltipOpen(false);
     setSelectedCard(null);
     setDeletedCard(null);
   }
 
-  function handleUpdateUser(name, about) {
+  function handleUpdateUserInfo(name, about) {
     api
-      .patchUserInfo({ name, about })
-      .then((userData) => {
-        setCurrentUser(userData);
+      .updateUserInfo({ name, about })
+      .then((user) => {
+        setCurrentUser(user);
         closeAllPopups();
       })
       .catch((err) => {
@@ -170,9 +173,9 @@ function App() {
 
   function handleUpdateAvatar(avatar) {
     api
-      .patchAvatar({ avatar })
-      .then((userData) => {
-        setCurrentUser(userData);
+      .updateAvatar({ avatar })
+      .then((user) => {
+        setCurrentUser(user);
         closeAllPopups();
       })
       .catch((err) => {
@@ -184,9 +187,9 @@ function App() {
     setIsLoading(true);
   }
 
-  function handleAddPlaceSubmit(name, link) {
+  function handleAddCard(name, link) {
     api
-      .postCard({ name, link })
+      .addCard({ name, link })
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -200,22 +203,26 @@ function App() {
     setIsLoading(true);
   }
 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((user) => user === currentUser._id);
+  function handleToggleLike(card) {
+    // если id текущего пользователя совпадает с id пользователя в массиве лайков, то isLiked = true, иначе - false
+    const isLiked = card.likes.some((userId) => userId === currentUser._id);
 
     api
       .toggleLike(card._id, isLiked)
-      .then((newCard) => {
-        setCards((cards) =>
-          cards.map((c) => (c._id === card._id ? newCard : c))
-        );
+      .then((card) => {
+        setCards((cards) => cards.map((c) => (c._id === card._id ? card : c)));
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
   }
 
-  function handleConfirmDelete(card) {
+  function handleConfirmationOpen(card) {
+    setDeletedCard(card);
+    setIsPopupWithConfirmationOpen(true);
+  }
+
+  function handleDeleteCard(card) {
     api
       .deleteCard(card._id)
       .then(() => {
@@ -227,11 +234,6 @@ function App() {
       });
   }
 
-  function handleCardDeleteClick(card) {
-    setDeletedCard(card);
-    setIsPopupWithConfirmationOpen(true);
-  }
-
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -239,7 +241,7 @@ function App() {
           loggedIn={isLoggedIn}
           onLogout={handleLogout}
           currentUserEmail={currentUserEmail}
-          isOpen={isMenuMobileOpen}
+          isMenuOpen={isMenuMobileOpen}
           onMenuClick={handleMenuMobileOpen}
         />
         <Routes>
@@ -251,10 +253,10 @@ function App() {
                   <Main
                     onEditAvatar={handleEditAvatarClick}
                     onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
+                    onAddCard={handleAddCardClick}
                     onCardClick={handleCardClick}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDeleteClick}
+                    onToggleLike={handleToggleLike}
+                    onConfirmDelete={handleConfirmationOpen}
                     cards={cards}
                   />
                   <Footer />
@@ -280,13 +282,13 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
+          onUpdateInfo={handleUpdateUserInfo}
           isLoading={isLoading}
         />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
+        <AddCardPopup
+          isOpen={isAddCardPopupOpen}
           onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
+          onAddCard={handleAddCard}
           isLoading={isLoading}
         />
         <PopupWithConfirmation
@@ -294,7 +296,7 @@ function App() {
           card={deletedCard}
           isOpen={isPopupWithConfirmationOpen}
           onClose={closeAllPopups}
-          onConfirm={handleConfirmDelete}
+          onConfirm={handleDeleteCard}
           isLoading={isLoading}
         />
         <ImagePopup
