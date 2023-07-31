@@ -5,9 +5,10 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
+  color: rgba(0, 0, 0, 1);
+  background-color: rgba(255, 255, 255, 1);
   border: none;
   border-radius: 2px;
-  background-color: rgba(255, 255, 255, 1);
   transition: opacity 0.2s;
   cursor: pointer;
 }
@@ -22,5 +23,5 @@
 }
 
 .authentication__submit-button:hover {
-  opacity: 0.85;
+  opacity: 0.8;
 }

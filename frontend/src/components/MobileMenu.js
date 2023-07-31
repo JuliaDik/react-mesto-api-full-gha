@@ -7,7 +7,7 @@ function MobileMenu({ currentUserEmail, onLogout, isOpen }) {
       <Route
         path="/"
         element={
-          <div className={`menu-mobile ${isOpen && "menu-mobile_opened"} appearance`}>
+          <div className={`menu-mobile ${isOpen && "menu-mobile_opened"}`}>
             <p className="menu-mobile__email">{currentUserEmail}</p>
             <Link className="menu-mobile__link" onClick={onLogout}>
               Выйти

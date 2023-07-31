@@ -16,7 +16,6 @@ class Auth {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: {
-        "Accept": "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
@@ -28,7 +27,6 @@ class Auth {
     return fetch(`${this._baseUrl}/signin`, {
       method: "POST",
       headers: {
-        "Accept": "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
@@ -36,20 +34,19 @@ class Auth {
   }
 
   // проверка токена
-  checkToken(token) {
+  checkToken(jwt) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        authorization: `Bearer ${jwt}`,
       },
     }).then(this._checkResponse);
   }
 }
 
 const auth = new Auth({
-  baseUrl: "https://auth.nomoreparties.co",
+  baseUrl: "http://localhost:3001",
 });
 
 export default auth;

@@ -2,7 +2,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors, Joi, celebrate } = require('celebrate');
@@ -13,8 +12,9 @@ const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const NotFoundError = require('./errors/not-found-err');
 const { URL_REGEX } = require('./utils/constants');
+const cors = require('./middlewares/cors');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
 
@@ -40,9 +40,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 // чтение потока JSON-данных из тела запроса
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// чтение кук
-app.use(cookieParser());
+app.use(cors);
 
 // роут регистрации
 app.post('/signup', celebrate({

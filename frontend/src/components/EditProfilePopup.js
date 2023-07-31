@@ -7,19 +7,18 @@ import Input from "./Input";
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const { values, errors, isValid, handleChange, setValues } = useFormAndValidation({
+  const { values, errors, isValid, setIsValid, handleChange, setValues } = useFormAndValidation({
       name: "",
       about: "",
     });
 
   useEffect(() => {
-    if (currentUser.name && currentUser.about) {
-      setValues({
-        name: currentUser.name,
-        about: currentUser.about,
-      });
-    }
-  }, [currentUser, isOpen]);
+    setValues({
+      name: currentUser.name,
+      about: currentUser.about,
+    });
+    setIsValid(true);
+  }, [setValues, setIsValid, currentUser, isOpen]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -45,7 +44,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           value={values.name || ""}
           handleChange={handleChange}
           minLength="2"
-          maxLength="40"
+          maxLength="30"
           placeholder="Имя"
           location="popup"
           errorMessage={errors.name}
@@ -56,7 +55,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           value={values.about || ""}
           handleChange={handleChange}
           minLength="2"
-          maxLength="200"
+          maxLength="30"
           placeholder="О себе"
           location="popup"
           errorMessage={errors.name}

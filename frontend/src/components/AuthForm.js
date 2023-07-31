@@ -28,20 +28,19 @@ function AuthForm({ name, title, buttonText, onSubmitClick, children }) {
         <div className="authentication__input-container">
           <Input
             type="email"
+            placeholder="Email"
             name="email"
             value={values.email || ""}
             handleChange={handleChange}
-            minLength="2"
-            maxLength="30"
             location="authentication"
             errorMessage={errors.email}
           />
           <Input
             type="password"
+            placeholder="Пароль"
             name="password"
             value={values.password || ""}
             handleChange={handleChange}
-            minLength="6"
             location="authentication"
             errorMessage={errors.password}
           />

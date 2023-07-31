@@ -34,13 +34,34 @@ function App() {
   // карточки
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [cardId, setCardId] = useState(null);
+  const [deletedCard, setDeletedCard] = useState(null);
   // меню (мобильная версия)
   const [isMenuMobileOpen, setIsMenuMobileOpen] = useState(false);
   // загрузка
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          if (res) {
+            // при повторном визите на сайт
+            // пользователь не должен вновь авторизовываться
+            setCurrentUserEmail(res.email);
+            setIsLoggedIn(true);
+            // сразу перенаправляется в пользовательский профиль
+            navigate("/", { replace: true });
+          }
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -54,27 +75,6 @@ function App() {
         });
     }
   }, [isLoggedIn]);
-
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            // при повторном визите на сайт
-            // пользователь не должен вновь авторизовываться
-            setCurrentUserEmail(res.data.email);
-            setIsLoggedIn(true);
-            // сразу перенаправляется в пользовательский профиль
-            navigate("/", { replace: true });
-          }
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
-    }
-  }, []);
 
   function handleRegister(email, password) {
     auth
@@ -149,6 +149,7 @@ function App() {
     setIsPopupWithConfirmationOpen(false);
     setIsInfoTooltipOpen(false);
     setSelectedCard(null);
+    setDeletedCard(null);
   }
 
   function handleUpdateUser(name, about) {
@@ -200,7 +201,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((user) => user === currentUser._id);
 
     api
       .toggleLike(card._id, isLiked)
@@ -214,11 +215,11 @@ function App() {
       });
   }
 
-  function handleConfirmDelete() {
+  function handleConfirmDelete(card) {
     api
-      .deleteCard(cardId)
+      .deleteCard(card._id)
       .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== cardId));
+        setCards((cards) => cards.filter((c) => c._id !== card._id));
         closeAllPopups();
       })
       .catch((err) => {
@@ -226,8 +227,8 @@ function App() {
       });
   }
 
-  function handleCardDeleteClick(cardId) {
-    setCardId(cardId);
+  function handleCardDeleteClick(card) {
+    setDeletedCard(card);
     setIsPopupWithConfirmationOpen(true);
   }
 
@@ -290,7 +291,7 @@ function App() {
         />
         <PopupWithConfirmation
           type="delete"
-          card={selectedCard}
+          card={deletedCard}
           isOpen={isPopupWithConfirmationOpen}
           onClose={closeAllPopups}
           onConfirm={handleConfirmDelete}
