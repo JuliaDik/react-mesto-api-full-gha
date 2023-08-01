@@ -5,7 +5,7 @@
 
 ## Ссылки на проект
 
-IP 84.201.159.144
+IP 51.250.31.234
 
 Frontend https://mesto.frontend.nomoredomains.xyz
 
