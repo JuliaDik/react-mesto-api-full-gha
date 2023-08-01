@@ -67,12 +67,12 @@ const createUser = (req, res, next) => {
     }))
     // ОТВЕТ ОТ БД: новый пользователь (возвращается все, кроме пароля)
     // сервер успешно обработал запрос и создал новый ресурс
-    .then((user) => res.status(201).send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-      email: user.email,
-      _id: user._id,
+    .then(({ _id }) => res.status(201).send({
+      name,
+      about,
+      avatar,
+      email,
+      _id,
     }))
     .catch((err) => {
       // если пользователь пытается зарегистрироваться по уже существующему в БД email
