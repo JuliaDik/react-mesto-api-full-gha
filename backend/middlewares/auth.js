@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorized-err');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   // получаем из заголовков запроса заголовок авторизации
@@ -21,7 +21,7 @@ const auth = (req, res, next) => {
   try {
     // сравниваем текущий токен с токеном, выданным сервером пользователю при его авторизации
     // сохраняем данные аутентификации в payload токена
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     // если не совпадают, то возвращаем ошибку:
     // уведомляем пользователя о необходимости авторизоваться

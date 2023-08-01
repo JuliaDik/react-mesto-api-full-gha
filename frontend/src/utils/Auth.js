@@ -13,7 +13,7 @@ class Auth {
   }
 
   // зарегистрировать пользователя
-  register(email, password) {
+  register({ email, password }) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: this._headers,
@@ -35,8 +35,9 @@ class Auth {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
+        "Accept": "application/json",
         "Content-Type": "application/json",
-        authorization: `Bearer ${jwt}`,
+        "Authorization": `Bearer ${jwt}`,
       },
     }).then(this._checkResponse);
   }
@@ -45,6 +46,7 @@ class Auth {
 const auth = new Auth({
   baseUrl: "https://mesto.api.nomoredomains.sbs",
   headers: {
+    "Accept": "application/json",
     // формат передачи данных в теле запроса/ответа - json
     "Content-Type": "application/json",
   },

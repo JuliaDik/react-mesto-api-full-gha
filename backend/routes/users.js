@@ -24,15 +24,15 @@ router.get('/:userId', celebrate({
 router.patch('/me', celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
   }),
 }), updateUserInfo);
 
 router.patch('/me/avatar', celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
-    avatar: Joi.string().regex(URL_REGEX),
+    avatar: Joi.string().required().regex(URL_REGEX),
   }),
 }), updateUserAvatar);
 

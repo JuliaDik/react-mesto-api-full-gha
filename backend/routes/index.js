@@ -33,7 +33,7 @@ router.use('/users', auth, usersRouter);
 router.use('/cards', auth, cardsRouter);
 
 // несуществующий маршрут
-router.all('*', (req, res, next) => {
+router.use((req, res, next) => {
   next(new NotFoundError('Запрашиваемый роут не найден'));
 });
 

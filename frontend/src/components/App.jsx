@@ -41,28 +41,6 @@ function App() {
 
   const navigate = useNavigate();
 
-  // отрисовка основной страницы
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    // если токен есть в локальном хранилище браузера, то отправляем его серверу на проверку
-    if (jwt) {
-      auth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setCurrentUserEmail(res.email);
-            // если токен успешно проходит проверку, пользователь авторизовывается и получает доступ к системе (защищенным маршрутам)
-            setIsLoggedIn(true);
-            // и перенаправляется на основную страницу /
-            navigate("/", { replace: true });
-          }
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
-    }
-  }, [navigate]);
-
   // отрисовка данных пользователя и карточек
   useEffect(() => {
     // если пользователь авторизован, на основной странице отображаются данные пользователя и карточки
@@ -78,16 +56,34 @@ function App() {
     }
   }, [isLoggedIn]);
 
+  // отрисовка основной страницы
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    // если токен есть в локальном хранилище браузера, то отправляем его серверу на проверку
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          setCurrentUserEmail(res.email);
+          // если токен успешно проходит проверку, пользователь авторизовывается и получает доступ к системе (защищенным маршрутам)
+          setIsLoggedIn(true);
+          // и перенаправляется на основную страницу /
+          navigate("/", { replace: true });
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
+    }
+  }, [navigate]);
+
   function handleRegister(email, password) {
     auth
       .register(email, password)
-      .then((res) => {
-        if (res) {
-          setIsSucceeded(true);
-          setIsInfoTooltipOpen(true);
-          // пользователь перенаправляется на страницу авторизации (логина)
-          navigate("/sign-in", { replace: true });
-        }
+      .then(() => {
+        setIsSucceeded(true);
+        setIsInfoTooltipOpen(true);
+        // пользователь перенаправляется на страницу авторизации (логина)
+        navigate("/sign-in", { replace: true });
       })
       .catch((err) => {
         setIsSucceeded(false);
@@ -100,14 +96,12 @@ function App() {
     auth
       .login(email, password)
       .then((res) => {
-        if (res) {
-          // после успешной авторизации сервер присваивает пользователю токен
-          // извлекаем токен из ответа сервера и сохраняем его в локальном хранилище браузера
-          localStorage.setItem("jwt", res.token);
-          setIsLoggedIn(true);
-          // пользователь получает доступ к системе и перенаправляется на основную страницу /
-          navigate("/", { replace: true });
-        }
+        // после успешной авторизации сервер присваивает пользователю токен
+        // извлекаем токен из ответа сервера и сохраняем его в локальном хранилище браузера
+        localStorage.setItem("jwt", res.token);
+        setIsLoggedIn(true);
+        // пользователь получает доступ к системе и перенаправляется на основную страницу /
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         setIsSucceeded(false);

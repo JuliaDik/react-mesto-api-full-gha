@@ -14,13 +14,13 @@ const { PORT = 3000, URL_DB = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 // запускаем серверное приложение
 const app = express();
 
+// настраиваем кросс-доменные запросы
+app.use(cors);
+
 // подключаемся к БД
 mongoose.connect(URL_DB, {
   useNewUrlParser: true,
 });
-
-// настраиваем кросс-доменные запросы
-app.use(cors);
 
 // ограничиваем количество запросов на сервер
 app.use(rateLimit({
