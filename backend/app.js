@@ -8,7 +8,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 const router = require('./routes/index');
 
-const { PORT = 3001, URL_DB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
+const { PORT = 3000, URL_DB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
 // запускаем серверное приложение
 const app = express();
@@ -50,7 +50,7 @@ app.use(router);
 // записываем все возникающие ошибки в отдельный файл ("журнал ошибок")
 app.use(errorLogger);
 
-// сервер обрабатывает запросы и отправляет ответы через 3001 порт
+// сервер обрабатывает запросы и отправляет ответы через 3000 порт
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
