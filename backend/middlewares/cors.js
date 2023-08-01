@@ -1,5 +1,7 @@
 // домены, с которых разрешены кросс-доменные запросы
 const allowedCors = [
+  'https://mesto.frontend.nomoredomains.xyz',
+  'http://mesto.frontend.nomoredomains.xyz',
   'http://localhost:3000',
 ];
 
