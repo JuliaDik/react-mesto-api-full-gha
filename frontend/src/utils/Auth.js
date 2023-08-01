@@ -13,7 +13,7 @@ class Auth {
   }
 
   // зарегистрировать пользователя
-  register({ email, password }) {
+  register(email, password) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: this._headers,
