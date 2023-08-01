@@ -81,8 +81,7 @@ class Api {
 }
 
 const api = new Api({
-  // сервер принимает запросы на 3000 порт
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://mesto.api.nomoredomains.sbs",
   headers: {
     // формат передачи данных в теле запроса/ответа - json
     "Content-Type": "application/json",
